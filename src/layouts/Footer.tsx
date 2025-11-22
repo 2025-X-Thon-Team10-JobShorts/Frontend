@@ -12,7 +12,7 @@ const ICON_ITEMS = [
   { title: '프로필', icon: UserRound, href: '/profile' },
 ];
 
-const DONT_SHOW_FOOTER_PATHS = ['/login', '/upload'];
+const DONT_SHOW_FOOTER_PATHS = ['/login', '/upload', '/onboarding'];
 
 export default function Footer() {
   const pathname = usePathname();
