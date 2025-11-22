@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
   ChevronLeft,
@@ -13,10 +13,31 @@ import {
   Mail,
 } from 'lucide-react';
 import { MOCK_USER } from '@/mocks/profile';
+import { CompanyProfilePage } from '@/components/mypage/CompanyProfilePage';
+import { LOCAL_STORAGE_KEYS, type UserRole } from '@/constants/local-storage';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'posts' | 'likes'>('posts');
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
   const user = MOCK_USER;
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const role = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_ROLE) as UserRole | null;
+      setUserRole(role);
+    }
+  }, []);
+
+  // 기업 역할일 때 CompanyProfilePage 표시
+  if (userRole === 'COMPANY') {
+    return (
+      <main className="min-h-screen bg-white flex justify-center">
+        <div className="w-full max-w-md bg-white border-x border-gray-100 shadow-sm min-h-screen flex flex-col">
+          <CompanyProfilePage />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-white flex justify-center">
