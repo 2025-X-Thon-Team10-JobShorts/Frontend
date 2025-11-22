@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { UserRole, LOCAL_STORAGE_KEYS } from '@/constants/local-storage';
-import { User, Briefcase, Lock, ArrowLeft } from 'lucide-react';
+import { KoreaMajorCity } from '@/constants/korea-major-city';
+import { User, Briefcase, Lock, ArrowLeft, MapPinned } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface LoginFormData {
@@ -12,6 +13,8 @@ interface LoginFormData {
   password: string;
   name: string;
 }
+
+const IS_DEV = process.env.NODE_ENV === 'development';
 
 const ROLE_BUTTON_TEXT = {
   USER: {
@@ -27,7 +30,6 @@ const ROLE_BUTTON_TEXT = {
 export default function LoginPage() {
   const router = useRouter();
 
-  // react-hook-form 설정
   const {
     register,
     handleSubmit,
@@ -35,6 +37,13 @@ export default function LoginPage() {
   } = useForm<LoginFormData>();
 
   const [selectedRole, setSelectedRole] = useState<UserRole>('USER');
+  const [selectedCity, setSelectedCity] = useState<string>('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedCity(value);
+    console.log('전송될 데이터(영어 Enum Key):', value); // 예: "SEOUL"
+  };
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -71,7 +80,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center px-6 pt-12 pb-6 mx-auto w-full">
+    <div
+      className={cn(
+        'min-h-screen bg-white flex flex-col items-center px-6 pt-12 pb-6 mx-auto w-full',
+        'no-scrollbar [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]',
+      )}
+    >
       {/* 헤더 (뒤로가기 및 타이틀) */}
       <div className="w-full flex items-center mb-8 relative">
         <button onClick={() => router.back()} className="absolute left-0 p-2">
@@ -134,7 +148,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* 이름 (스크린샷에 있어서 포함했으나, 일반적인 로그인에는 잘 쓰이지 않습니다) */}
+        {/* 이름 */}
         <div>
           <label className="block text-gray-800 text-sm font-medium mb-2">이름</label>
           <div className="relative">
@@ -151,6 +165,43 @@ export default function LoginPage() {
               )}
             />
           </div>
+        </div>
+
+        <div>
+          <label className="block text-gray-800 text-sm font-medium mb-2">
+            {selectedRole === 'USER' ? '희망 근무지' : '회사 위치'}
+          </label>
+          <div className="relative">
+            {' '}
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <MapPinned className="h-5 w-5 text-gray-400" />
+            </div>
+            <select
+              value={selectedCity}
+              onChange={handleChange}
+              className={cn(
+                'w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg',
+                'focus:outline-none focus:border-gray-800 focus:ring-1 focus:ring-gray-800 transition-colors',
+              )}
+            >
+              <option value="" disabled>
+                지역을 선택해주세요
+              </option>
+
+              {Object.entries(KoreaMajorCity).map(([enumKey, enumValue]) => (
+                <option key={enumKey} value={enumKey}>
+                  {enumValue}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* 디버깅용 출력 */}
+          {IS_DEV && (
+            <div className="mt-4 p-3 bg-gray-100 rounded text-xs text-gray-600">
+              선택된 값(백엔드 전송용): <strong>{selectedCity}</strong>
+            </div>
+          )}
         </div>
 
         {/* 로그인 버튼 */}
