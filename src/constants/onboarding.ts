@@ -22,20 +22,20 @@ export type OnboardingContents = {
 
 export const ONBOARDING_CONTENTS: Record<string, OnboardingContents> = {
   step1: {
-    title: '당신의 잠재력을 표현',
-    description: '15초와 30초 사이\n당신을 보여주세요!',
+    title: '나를 보여주는 30초',
+    description: '15~30초면 충분해요.\n가장 ‘당신다운’ 순간을 담아주세요!',
     imageUrl: '/onboarding/step1.png',
     gradient: 'bg-[linear-gradient(135deg,_#38BDF8_0%,_#93C5FD_100%)]',
   },
   step2: {
-    title: '숏폼 컨텐츠로 채용',
-    description: '수많은 지원서에서 탈출하세요.',
+    title: '채용도 숏폼처럼 가볍게',
+    description: '길고 지친 지원서 대신,\n더 빠르고 솔직하게 연결됩니다.',
     imageUrl: '/onboarding/step2.png',
     gradient: 'bg-[linear-gradient(135deg,_#7DD3FC_0%,_#BAE6FD_100%)]',
   },
   step3: {
-    title: '빠르게 일해봅시다',
-    description: '지금 당장\n잡으숏에 참여하세요!',
+    title: '지금 바로 기회를 잡아보세요',
+    description: '당신의 영상이\n새로운 일을 불러옵니다!',
     imageUrl: '/onboarding/step3.png',
     gradient: 'bg-[linear-gradient(135deg,_#0EA5E9_0%,_#60A5FA_100%)]',
   },

@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+// import { ScrollArea } from '@/components/ui/scroll-area';
+// import { Separator } from '@/components/ui/separator';
 
 import { FaPlay } from 'react-icons/fa';
 import { Calendar, Clock, Sparkles, Tag, AlignLeft } from 'lucide-react';
