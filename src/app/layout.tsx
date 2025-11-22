@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Job으 Shorts!',
   description: 'A platform to share and discover short videos.',
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 const IS_DEV = process.env.NODE_ENV === 'development';
