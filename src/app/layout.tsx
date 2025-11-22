@@ -37,7 +37,7 @@ export default function RootLayout({
           IS_DEV ? 'bg-green-400' : 'bg-gray-100',
         )}
       >
-        <div className="flex flex-col justify-between w-full max-w-lg h-full bg-gray-200">
+        <div className="flex flex-col justify-between w-full max-w-md h-full bg-gray-100">
           <main>{children}</main>
           <Footer />
         </div>
