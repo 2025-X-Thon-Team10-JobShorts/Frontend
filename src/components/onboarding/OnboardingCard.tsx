@@ -40,21 +40,25 @@ export default function OnboardingCard({
           </button>
         </div>
 
-        <Image
-          src={content.imageUrl}
-          alt="Onboarding Image"
-          width={280}
-          height={360}
-          className="rounded-3xl mt-8 max-h-[40vh] object-contain"
-        />
+        <div className="w-full h-full flex justify-center items-center mt-4 px-8">
+          <div className="relative max-h-[45vh] rounded-3xl overflow-hidden">
+            <Image
+              src={content.imageUrl}
+              alt="Onboarding Image"
+              width={300}
+              height={400}
+              className="object-contain"
+            />
+          </div>
+        </div>
       </div>
 
       {/* 하단 카드 */}
       <div
-        className="bg-white w-full rounded-t-4xl p-8 flex flex-col justify-between items-center"
-        style={{ height: '38svh' }}
+        className="bg-white w-full rounded-t-4xl p-2 pt-8 md:p-8 flex flex-col justify-between items-center"
+        style={{ height: '35svh' }}
       >
-        <h2 className="font-semibold text-3xl">{content.title}</h2>
+        <h2 className="font-semibold text-2xl md:text-3xl">{content.title}</h2>
 
         <p className="font-medium text-[#737373] text-base text-center whitespace-pre-line">
           {content.description}

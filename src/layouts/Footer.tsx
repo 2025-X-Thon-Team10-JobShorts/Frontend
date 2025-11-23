@@ -1,10 +1,21 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils'; // cn 유틸리티 사용 권장 (없다면 일반 템플릿 리터럴로 대체 가능)
+import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import { FOOTER_ITEMS, DONT_SHOW_FOOTER_PATHS } from '@/constants/footer';
+import { LOCAL_STORAGE_KEYS } from '@/constants/local-storage';
+
 export default function Footer() {
   const pathname = usePathname();
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  // 사용자 역할 가져오기
+  useEffect(() => {
+    const role = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_ROLE);
+    // eslint-disable-next-line
+    setUserRole(role);
+  }, [pathname]);
 
   // 1. 숨김 처리
   if (DONT_SHOW_FOOTER_PATHS.includes(pathname)) {
@@ -13,6 +24,14 @@ export default function Footer() {
 
   // 2. 숏츠 페이지 여부 확인
   const isShorts = pathname === '/shorts';
+
+  const visibleItems = FOOTER_ITEMS.filter(item => {
+    // 기업 회원이면 'Upload' 메뉴 제외
+    if (userRole === 'COMPANY' && item.title === '업로드') {
+      return false;
+    }
+    return true;
+  });
 
   return (
     <footer
@@ -24,7 +43,7 @@ export default function Footer() {
           : 'bg-white text-gray-600 border-t border-gray-200',
       )}
     >
-      {FOOTER_ITEMS.map(({ title, icon: Icon, href }) => {
+      {visibleItems.map(({ title, icon: Icon, href }) => {
         const isActive = pathname === href;
         return (
           <Link

@@ -15,11 +15,18 @@ import { UserRole, LOCAL_STORAGE_KEYS } from '@/constants/local-storage';
 import { KoreaMajorCity } from '@/constants/korea-major-city';
 import { User, Briefcase, Lock, ArrowLeft, MapPinned } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { instance } from '@/apis/instance';
 
 interface LoginFormData {
   id: string;
   password: string;
   name: string;
+}
+
+interface LoginResponse {
+  success: boolean;
+  pid: string;
+  message?: string;
 }
 
 const IS_DEV = process.env.NODE_ENV === 'development';
@@ -35,6 +42,11 @@ const ROLE_BUTTON_TEXT = {
   },
 };
 
+const BASE_URL = {
+  LOGIN: `/api/proxy/auth/login`,
+  SIGNUP: `/api/proxy/auth/signup`,
+};
+
 export default function LoginPage() {
   const router = useRouter();
 
@@ -46,31 +58,30 @@ export default function LoginPage() {
 
   const [selectedRole, setSelectedRole] = useState<UserRole>('USER');
   const [selectedCity, setSelectedCity] = useState<string>('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedCity(value);
-    console.log('전송될 데이터(영어 Enum Key):', value); // 예: "SEOUL"
-  };
+  const [loginMode, setLoginMode] = useState<'LOGIN' | 'SIGNUP'>('LOGIN');
 
   const onSubmit = async (data: LoginFormData) => {
     try {
       // 폼 데이터와 선택된 Role을 합쳐서 전송
       const requestBody = {
-        ...data,
+        loginId: data.id,
+        password: data.password,
         role: selectedRole,
+        displayName: data.name,
+        // city: selectedCity,
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
+      const response = await fetch(BASE_URL[loginMode], {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody),
+        credentials: 'include',
       });
 
       if (response.ok) {
-        const responseData = await response.json();
+        const responseData: LoginResponse = await response.json();
         localStorage.setItem(LOCAL_STORAGE_KEYS.USER_ROLE, selectedRole);
         if (responseData.pid) {
           localStorage.setItem(LOCAL_STORAGE_KEYS.PID, responseData.pid);
@@ -209,16 +220,29 @@ export default function LoginPage() {
         <div className="pt-4 space-y-4">
           <button
             type="submit"
-            className="w-full bg-gray-900 text-white font-bold py-4 px-4 rounded-lg hover:bg-black transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+            className={cn(
+              'w-full bg-gray-900 text-white font-bold py-4 px-4 rounded-lg',
+              'hover:bg-black transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900',
+            )}
           >
             로그인
           </button>
           <button
+            type="submit"
+            onClick={() => setLoginMode('SIGNUP')}
+            className={cn(
+              'w-full bg-gray-700 text-white font-bold py-4 px-4 rounded-lg',
+              'hover:bg-black transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900',
+            )}
+          >
+            회원가입
+          </button>
+          {/* <button
             onClick={() => router.push('/shorts')}
             className="w-full text-gray-900 border border-gray-200 font-bold py-4 px-4 rounded-lg hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
           >
             로그인 하지 않고 둘러보기
-          </button>
+          </button> */}
         </div>
       </form>
     </div>
