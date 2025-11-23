@@ -15,6 +15,7 @@ import { UserRole, LOCAL_STORAGE_KEYS } from '@/constants/local-storage';
 import { KoreaMajorCity } from '@/constants/korea-major-city';
 import { User, Briefcase, Lock, ArrowLeft, MapPinned } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { instance } from '@/apis/instance';
 
 interface LoginFormData {
   id: string;
@@ -42,8 +43,8 @@ const ROLE_BUTTON_TEXT = {
 };
 
 const BASE_URL = {
-  LOGIN: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
-  SIGNUP: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`,
+  LOGIN: `/api/proxy/auth/login`,
+  SIGNUP: `/api/proxy/auth/signup`,
 };
 
 export default function LoginPage() {
@@ -228,6 +229,7 @@ export default function LoginPage() {
           </button>
           <button
             type="submit"
+            onClick={() => setLoginMode('SIGNUP')}
             className={cn(
               'w-full bg-gray-700 text-white font-bold py-4 px-4 rounded-lg',
               'hover:bg-black transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900',

@@ -1,4 +1,4 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BACKEND_URL = '/api/proxy';
 
 export async function getPresignedUrl({ ownerPid, file }: { ownerPid: string; file: File }) {
   const res = await fetch(`${BACKEND_URL}/short-forms/upload-url`, {
