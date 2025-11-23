@@ -27,6 +27,7 @@ function ShortsPlayerInner(
   { short, isActive }: ShortsPlayerProps,
   ref: React.Ref<ShortsPlayerRef>,
 ) {
+  console.log('Rendering ShortsPlayer for short id:', short.id);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPaused, setIsPaused] = useState(true);
   const [open, setOpen] = useState(false);
@@ -103,6 +104,8 @@ function ShortsPlayerInner(
     if (isPaused) play();
     else pause();
   };
+
+  console.log('short videoUrl:', short.videoUrl);
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>

@@ -18,12 +18,12 @@ async function fetchShortsFeed({ pageParam, pid }: { pageParam?: string | null; 
   }
 
   const res = await instance.get<ShortsFeedResponse>(`/short-forms/api/feed`, { params });
-  const parsed = ShortsFeedResponseSchema.safeParse(res.data);
-  if (!parsed.success) {
-    throw new Error('숏츠 무한스크롤 쿼리 응답 파싱 실패, 타입이 일치하지 않습니다.');
-  }
+  // const parsed = ShortsFeedResponseSchema.safeParse(res.data);
+  // if (!parsed.success) {
+  //   throw new Error('숏츠 무한스크롤 쿼리 응답 파싱 실패, 타입이 일치하지 않습니다.');
+  // }
 
-  return parsed.data;
+  return res.data;
 }
 
 export function useInfiniteShortsFeed(pid: string | null) {
@@ -32,6 +32,7 @@ export function useInfiniteShortsFeed(pid: string | null) {
     queryFn: ({ pageParam, queryKey }) =>
       fetchShortsFeed({ pageParam: pageParam as string | null, pid: queryKey[1] as string }),
     initialPageParam: null,
+    enabled: !!pid,
     getNextPageParam: lastPage => (lastPage.hasNextPage ? lastPage.nextPageParam : undefined),
   });
 }

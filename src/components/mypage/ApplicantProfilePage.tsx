@@ -19,10 +19,7 @@ interface ApplicantProfilePageProps {
   posts?: Post[];
 }
 
-export function ApplicantProfilePage({
-  profile,
-  posts = [],
-}: ApplicantProfilePageProps) {
+export function ApplicantProfilePage({ profile, posts = [] }: ApplicantProfilePageProps) {
   const [activeTab, setActiveTab] = useState<'posts' | 'likes'>('posts');
 
   const stats: ProfileStat[] = [
@@ -45,16 +42,14 @@ export function ApplicantProfilePage({
 
   return (
     <>
-      <ProfileHeader
-        onBackClick={() => console.log('뒤로가기')}
-        onSettingsClick={handleSettings}
-      />
+      <ProfileHeader onBackClick={() => console.log('뒤로가기')} onSettingsClick={handleSettings} />
 
       <div className="flex-1 overflow-y-auto">
         <ProfileInfo
           avatar={{
             src: profile.profileImageUrl,
-            fallback: profile.displayName?.slice(0, 2) || profile.username.slice(0, 2),
+            fallback: profile.displayName?.slice(0, 2) || profile.username?.slice(0, 2) || '',
+
             alt: profile.displayName || profile.username,
           }}
           stats={stats}

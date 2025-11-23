@@ -6,18 +6,18 @@ import { queryKeys } from '@/constants/query-keys';
 import type { UserInfoResponse, CompanyInfoResponse, UpdateUserInfoRequest } from '@/types/mypage';
 import type { Applicant } from '@/types/company';
 
-export const useUserInfo = () => {
+export const useUserInfo = (pid: string) => {
   return useQuery({
     queryKey: queryKeys.mypage.userInfo(),
-    queryFn: mypageApi.getUserInfo,
+    queryFn: () => mypageApi.getUserInfo(pid),
     staleTime: 1000 * 60 * 5, // 5분
   });
 };
 
-export const useUserPosts = (userId = 'mypage') => {
+export const useUserPosts = (userId = 'mypage', pid: string) => {
   return useQuery({
     queryKey: queryKeys.mypage.userPosts(userId),
-    queryFn: () => mypageApi.getUserPosts(),
+    queryFn: () => mypageApi.getUserPosts(pid),
     staleTime: 1000 * 60 * 2, // 2분
   });
 };
@@ -38,11 +38,11 @@ export const useBookmarkedApplicants = (companyId: string) => {
   });
 };
 
-export const useUpdateUserInfo = () => {
+export const useUpdateUserInfo = (pid: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateUserInfoRequest) => mypageApi.updateUserInfo(data),
+    mutationFn: (data: UpdateUserInfoRequest) => mypageApi.updateUserInfo(data, pid),
     onSuccess: data => {
       queryClient.setQueryData(queryKeys.mypage.userInfo(), data);
       queryClient.invalidateQueries({ queryKey: queryKeys.mypage.all });
@@ -50,11 +50,11 @@ export const useUpdateUserInfo = () => {
   });
 };
 
-export const useToggleBookmark = () => {
+export const useToggleBookmark = (pid: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (applicantId: string) => mypageApi.toggleBookmarkApplicant(applicantId),
+    mutationFn: (applicantId: string) => mypageApi.toggleBookmarkApplicant(applicantId, pid),
     onSuccess: (_, applicantId) => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.mypage.bookmarkedApplicants(),
@@ -77,9 +77,9 @@ export const useToggleBookmark = () => {
   });
 };
 
-export const useMypage = () => {
-  const userInfoQuery = useUserInfo();
-  const updateUserMutation = useUpdateUserInfo();
+export const useMypage = (pid: string) => {
+  const userInfoQuery = useUserInfo(pid);
+  const updateUserMutation = useUpdateUserInfo(pid);
 
   const isCompany = (
     user: UserInfoResponse | CompanyInfoResponse | undefined,

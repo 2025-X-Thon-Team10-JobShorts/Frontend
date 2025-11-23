@@ -25,8 +25,25 @@ function ShortsPageInner() {
     setUserRole(role);
   }, []);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteShortsFeed(pid);
+  const {
+    data,
+    isLoading, // 로딩 중인지
+    isError, // 에러가 났는지
+    error, // 에러 내용이 뭔지
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteShortsFeed(pid);
+
+  console.log('Current PID:', pid);
+  console.log('Status - Loading:', isLoading, 'Error:', isError);
+
+  if (isError) {
+    console.error('Query Error Details:', error); // 여기서 에러 내용 확인 가능
+  }
+
   const shorts = data ? data.pages.flatMap(page => page.data) : [];
+  console.log(data);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -128,6 +145,7 @@ function ShortsPageInner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]); // currentIndex를 의존성에서 빼서 루프 방지
 
+  console.log('Rendering ShortsPage with shorts count:', shorts.length);
   return (
     <div className="relative w-full h-full bg-black">
       {/* 메인 스크롤 컨테이너 */}

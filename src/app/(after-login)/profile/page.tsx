@@ -8,17 +8,17 @@ import { useState, useEffect } from 'react';
 import { LOCAL_STORAGE_KEYS } from '@/constants/local-storage';
 
 export default function ProfilePage() {
-  const { user, isLoading, error, isCompany } = useMypage();
-  const userPostsQuery = useUserPosts();
-  const [companyPid, setCompanyPid] = useState<string>('');
+  const [pid, setPid] = useState<string>('');
+  const { user, isLoading, error, isCompany } = useMypage(pid);
+  const userPostsQuery = useUserPosts('mypage', pid);
 
-  const bookmarkedQuery = useBookmarkedApplicants(companyPid);
+  const bookmarkedQuery = useBookmarkedApplicants(pid);
 
   useEffect(() => {
-    const storedCompanyPid = localStorage.getItem(LOCAL_STORAGE_KEYS.PID);
-    if (storedCompanyPid) {
+    const storedPid = localStorage.getItem(LOCAL_STORAGE_KEYS.PID);
+    if (storedPid) {
       // eslint-disable-next-line
-      setCompanyPid(storedCompanyPid);
+      setPid(storedPid);
     }
   }, []);
 
