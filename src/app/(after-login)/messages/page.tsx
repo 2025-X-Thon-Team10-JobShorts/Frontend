@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { ThreadList } from '@/components/messages/ThreadList';
 import { MessageThread } from '@/components/messages/MessageThread';
-import { useWebSocket } from '@/hooks/useWebSocket';
 import type { ThreadResponse, MessageResponse } from '@/types/message';
 
 export default function MessagesPage() {
@@ -14,23 +13,8 @@ export default function MessagesPage() {
     return 'user_123';
   });
 
-  const { isConnected, subscribeToThread } = useWebSocket({
-    currentUserPid,
-    onMessageReceived: (wsMessage) => {
-      if (wsMessage.message && wsMessage.threadId === selectedThread?.id) {
-        console.log('New message received:', wsMessage.message);
-      }
-    },
-    onMessageRead: (data) => {
-      console.log('Message read:', data);
-    }
-  });
-
   const handleThreadSelect = (thread: ThreadResponse) => {
     setSelectedThread(thread);
-    if (isConnected) {
-      subscribeToThread(thread.id);
-    }
   };
 
   const handleNewMessage = (message: MessageResponse) => {
