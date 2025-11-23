@@ -4,11 +4,23 @@ import { ApplicantProfilePage } from '@/components/mypage/ApplicantProfilePage';
 import { CompanyProfilePage } from '@/components/mypage/CompanyProfilePage';
 import { useMypage, useUserPosts, useBookmarkedApplicants } from '@/hooks/useMypage';
 import type { CompanyInfoResponse, UserInfoResponse } from '@/types/mypage';
+import { useState, useEffect } from 'react';
+import { LOCAL_STORAGE_KEYS } from '@/constants/local-storage';
 
 export default function ProfilePage() {
   const { user, isLoading, error, isCompany } = useMypage();
   const userPostsQuery = useUserPosts();
-  const bookmarkedQuery = useBookmarkedApplicants();
+  const [companyPid, setCompanyPid] = useState<string>('');
+
+  const bookmarkedQuery = useBookmarkedApplicants(companyPid);
+
+  useEffect(() => {
+    const storedCompanyPid = localStorage.getItem(LOCAL_STORAGE_KEYS.PID);
+    if (storedCompanyPid) {
+      // eslint-disable-next-line
+      setCompanyPid(storedCompanyPid);
+    }
+  }, []);
 
   if (isLoading) {
     return (
@@ -64,7 +76,7 @@ export default function ProfilePage() {
               jobPostings: (user as CompanyInfoResponse).stats?.jobPostings || 0,
               followers: (user as CompanyInfoResponse).stats?.followers || 0,
             }}
-            bookmarkedApplicants={bookmarkedQuery.data || []}
+            bookmarkedApplicants={bookmarkedQuery?.data?.data || undefined}
           />
         ) : (
           <ApplicantProfilePage

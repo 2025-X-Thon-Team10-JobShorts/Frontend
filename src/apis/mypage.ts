@@ -24,13 +24,24 @@ export const mypageApi = {
     return response.data;
   },
 
-  getBookmarkedApplicants: async (page = 1, limit = 20): Promise<BookmarkedApplicantsResponse> => {
-    const response = await instance.get(`/mypage/bookmarked?page=${page}&limit=${limit}`);
+  getBookmarkedApplicants: async (
+    companyPid: string,
+    page = 1,
+    limit = 20,
+  ): Promise<BookmarkedApplicantsResponse> => {
+    const response = await instance.get(
+      `/mypage/bookmarked?page=${page}&limit=${limit}&companyPid=${companyPid}`,
+    );
     return response.data;
   },
 
   toggleBookmarkApplicant: async (applicantId: string): Promise<BookmarkToggleResponse> => {
     const response = await instance.post(`/mypage/bookmark/${applicantId}`);
+    return response.data;
+  },
+
+  getCompanyProfile: async (companyId: string): Promise<CompanyInfoResponse> => {
+    const response = await instance.get(`/company/page/${companyId}`);
     return response.data;
   },
 };
