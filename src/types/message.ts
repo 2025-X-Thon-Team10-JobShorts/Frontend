@@ -54,11 +54,3 @@ export interface ThreadMessagesResponse {
   hasPreviousPage: boolean;
 }
 
-export interface WebSocketMessage {
-  type: 'INIT' | 'SUBSCRIBE' | 'MESSAGE_CREATED' | 'MESSAGE_READ';
-  currentUserPid?: string;
-  threadId?: number;
-  message?: MessageResponse;
-  readMessageId?: number;
-  readByUserPid?: string;
-}

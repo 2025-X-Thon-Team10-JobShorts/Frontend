@@ -1,10 +1,12 @@
 export const queryKeys = {
-  // 예시 쿼리 키
-  // posts: {
-  //   all: ['posts'] as const,
-  //   lists: () => [...queryKeys.posts.all, 'list'] as const,
-  //   detail: (postId: number) => [...queryKeys.posts.all, 'detail', postId] as const,
-  //   rightSidebar: (postId: number) => [...queryKeys.posts.all, 'rightSidebar', postId] as const,
-  //   similarPosts: (postId: number) => [...queryKeys.posts.all, 'similarPost', postId] as const,
-  // },
+  mypage: {
+    all: ['mypage'] as const,
+    userInfo: () => [...queryKeys.mypage.all, 'userInfo'] as const,
+    companyProfile: (companyId?: string) => 
+      [...queryKeys.mypage.all, 'company', companyId] as const,
+    bookmarkedApplicants: (companyId?: string) => 
+      [...queryKeys.mypage.all, 'bookmarked', companyId] as const,
+    userPosts: (userId?: string) => 
+      [...queryKeys.mypage.all, 'posts', userId] as const,
+  },
 };
