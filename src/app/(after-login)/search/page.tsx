@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { X, Clock, Search } from 'lucide-react';
-import Image from 'next/image';
 import { LOCAL_STORAGE_KEYS } from '@/constants/local-storage';
 
 import type { Shorts } from '@/apis/shorts/dto.types';
@@ -141,13 +140,14 @@ export default function SearchPage() {
         <div className="grid grid-cols-3 gap-2 mt-4">
           {results.map(item => (
             <div key={item.id} className="relative">
-              <Image
+              <video
                 src={item.videoUrl} // [TODO] 썸네일 URL로 변경 필요
-                alt={item.title}
+                // alt={item.title}
                 width={400}
                 height={600}
                 className="rounded-lg object-cover w-full h-40"
               />
+              <p className="px-1 line-clamp-2 text-ellipsis overflow-hidden">{item.title}</p>
             </div>
           ))}
         </div>
